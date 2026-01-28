@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class morseService {
     private static HashMap<Character, String> CharToMorse = new HashMap<>();
-    private static HashMap<Character, String> morseToChar= new HashMap<>();
+    private static HashMap<String, Character> morseToChar = new HashMap<>();
 
     static {
         CharToMorse.put('A', ".-");
@@ -36,12 +36,16 @@ public class morseService {
         CharToMorse.put('Y', "-.--");
         CharToMorse.put('Z', "--..");
 
+        for (Map.Entry<Character, String> entry : CharToMorse.entrySet()) {
+            morseToChar.put(entry.getValue(), entry.getKey());
+        }
+
         Scanner sc = new Scanner(System.in);
         System.out.println("1 text to morse");
         System.out.println("2 morse to text");
         String choice = sc.nextLine().trim();
 
-        if(choice.equals("1")) {
+        if (choice.equals("1")) {
 
             System.out.println("Enter sentence: ");
             String sentence = sc.nextLine().trim();
@@ -55,22 +59,23 @@ public class morseService {
                 System.out.println();
             }
             System.out.println("Your input " + sentence + " is converted to = " + result);
-        }
-        else if(choice.equals("2")) {
+        } else if (choice.equals("2")) {
             System.out.println("Enter morse sentence: ");
             String sentence = sc.nextLine().trim();
             String result = "";
 
-            char[] arr = sentence.toCharArray();
-            for (char c : arr) {
+            String[] morse = sentence.split(" ");
 
-                result += CharToMorse.get(c);
-                System.out.println();
+            for (String c : morse) {
+                if (c.equals("/")) {
+                    result += " ";
+                    continue;
+                }
+                result += morseToChar.get(c)+ " ";
             }
-
             System.out.println("Your input " + sentence + " is converted to = " + result);
-
-
+        }else{
+            System.out.println("bad input");
         }
 
     }

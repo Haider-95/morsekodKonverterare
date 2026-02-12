@@ -9,9 +9,10 @@ permissions:
   issues: write
 
 jobs:
-  create-branch:
-    runs-on: ubuntu-latest
+  create-branch: 
     if: ${{ github.event.label.name == 'ready' }}
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Skapa branch från main
         uses: actions/github-script@v7
@@ -29,7 +30,6 @@ jobs:
                 .replace(/(^-|-$)/g, '')
                 .slice(0, 30);
             }
-            
             const branchNamn = `morsekodKonverterare/${namnStandard(issue.title)}`;
             
             const refData = await github.rest.git.getRef({ owner, repo, ref: 'heads/main' });

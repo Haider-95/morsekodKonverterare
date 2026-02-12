@@ -30,7 +30,7 @@ jobs:
                 .replace(/(^-|-$)/g, '')
                 .slice(0, 30);
             }
-            const branchNamn = `morsekodKonverterare/${namnStandard(issue.title)}`;
+            const branchNamn = `${namnStandard(issue.title)}`;
             
             const refData = await github.rest.git.getRef({ owner, repo, ref: 'heads/main' });
             const sha = refData.data.object.sha;

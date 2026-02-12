@@ -55,7 +55,7 @@ jobs:
                   owner, 
                   repo, 
                   issue_number: issue.number, 
-                  body: `✅ Created branch: **${branchNamn}**` 
+                  body: `Skapade branch: **${branchNamn}**` 
                 });
               } else {
                 throw err;

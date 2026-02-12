@@ -12,7 +12,6 @@ jobs:
   create-branch:
     runs-on: ubuntu-latest
     if: "${{ github.event.label.name == 'ready' }}"
-
     steps:
       - name: Skapa branch från main
         uses: actions/github-script@v7
@@ -23,30 +22,42 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             
-            function namnStandard(title){
-            return title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '')
-            .slice(0,30);
+            function namnStandard(title) {
+              return title
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '')
+                .slice(0, 30);
             }
             
-            const branchNamn= `morsekodKonverterare/${namnStandard(issue.title)}`;
-
+            const branchNamn = `morsekodKonverterare/${namnStandard(issue.title)}`;
+            
             const refData = await github.rest.git.getRef({ owner, repo, ref: 'heads/main' });
             const sha = refData.data.object.sha;
             
             try {
-            await github.rest.git.getRef({ owner, repo, ref: `heads/${branchNamn}` });
-            await github.rest.issues.createComment({ owner, repo, issue_number:
-            issue.number, body: `Branch \`${branchNamn}\` already exists.`
-            });
-            }catch (err) {
-            if (err.status === 404) {
-            await github.rest.git.createRef({ owner, repo, ref: `refs/heads/${branchNamn}`, sha });
-            await github.rest.issues.createComment({ owner, repo, issue_number:
-            issue.number, body: `Created branch: **${ branchNamn }**` });
-            } else {
-            throw err;
-            }
+              await github.rest.git.getRef({ owner, repo, ref: `heads/${branchNamn}` });
+              await github.rest.issues.createComment({ 
+                owner, 
+                repo, 
+                issue_number: issue.number, 
+                body: `Branch \`${branchNamn}\` already exists.` 
+              });
+            } catch (err) {
+              if (err.status === 404) {
+                await github.rest.git.createRef({ 
+                  owner, 
+                  repo, 
+                  ref: `refs/heads/${branchNamn}`, 
+                  sha 
+                });
+                await github.rest.issues.createComment({ 
+                  owner, 
+                  repo, 
+                  issue_number: issue.number, 
+                  body: `✅ Created branch: **${branchNamn}**` 
+                });
+              } else {
+                throw err;
+              }
             }

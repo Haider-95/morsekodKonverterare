@@ -2,7 +2,7 @@ name: Auto branch when issue is labeled ready
 
 on:
   issues:
-    types: [ labeled ]
+    types: [labeled]
 
 permissions:
   contents: write
